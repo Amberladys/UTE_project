@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_element"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ff000000"
+    android:orientation="vertical"
+    android:padding="10sp"
+    android:baselineAligned="false"
+    android:theme="@style/Base.TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
+
+    <TextView
+        android:id="@+id/popup_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp"
+        android:height="130dp"
+        android:textSize="20dp"
+        android:text="Aplikacja 'Gdzie jestem?'\nwersja 1.0\nAutorzy:\nMariusz Sobiech\nŁukasz Czapla"
+        style="@style/Base.TextAppearance.AppCompat.Widget.PopupMenu.Large" />
+
+    <Button
+        android:id="@+id/close_popup_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:layout_gravity="center"
+        android:text="Close"
+        android:background="@color/background_floating_material_dark" />
+
+</LinearLayout>
+

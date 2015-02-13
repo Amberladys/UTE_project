@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Gdzie jestem</string>
+    <string name="start">START</string>
+    <string name="info">INFO</string>
+    <string name="end">ZAKOŃCZ</string>
+    <string name="city">TRANSPORT MIEJSKI</string>
+    <string name="bike">VETURILO</string>
+    <string name="parking">P \u0026 R</string>
+    <string name="title_activity_start_menu">Wybierz zadanie</string>
+    <string name="title_activity_park_and_ride">Park \u0026 Ride</string>
+    <string name="title_activity_bike">Veturillo</string>
+    <string name="title_activity_city">Transport miejski</string>
+    <string name="title_activity_maps">Map</string>
+
+</resources>

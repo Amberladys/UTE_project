@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
+
+
+    <TextView
+        android:id="@+id/tvIsConnected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="#FF0000"
+        android:textColor="#FFF"
+        android:textSize="18dp"
+        android:layout_marginBottom="5dp"
+        android:text="is connected? " />
+
+    <Button
+        android:id="@+id/start_button"
+        android:text="@string/start"
+        android:layout_marginTop="210dp"
+        android:layout_gravity="center"
+        android:layout_width="170dp"
+        android:layout_height="90dp"
+           />
+
+    <Button
+        android:id="@+id/info_button"
+        android:text="@string/info"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:layout_width="170dp"
+        android:layout_height="90dp"
+          />
+    <Button
+        android:id="@+id/end_button"
+        android:text="@string/end"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:layout_width="170dp"
+        android:layout_height="90dp"
+             />
+
+
+</LinearLayout>
