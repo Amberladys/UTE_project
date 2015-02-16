@@ -36,11 +36,13 @@ public class City_page extends ListActivity {
     private ProgressDialog pDialog;
     final Context context = this;
     JSONArray data = null;
-    ArrayList<HashMap<String, String>> dataList;
-    String[] coordinates = null;
-    JsonParser task = new JsonParser();
+    private ArrayList<HashMap<String, String>> dataList;
+    private ArrayList<String> coords;
+    private JsonParser task = new JsonParser();
 
-    private static String url = "https://api.bihapi.pl/wfs/warszawa/metroEntrances?circle=21.02,52.21,";
+    private String url = "https://api.bihapi.pl/wfs/warszawa/metroEntrances?circle=";
+    private ArrayList<String> coordinates;
+    private String localization;
 
     private static final int CITY_FLAG = 0;
 
@@ -57,50 +59,24 @@ public class City_page extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike);
         dataList = new ArrayList<HashMap<String, String>>();
+        coords = new ArrayList<String>();
 
 
         Intent i = getIntent();
         // Receiving the Data
         String zasieg = i.getStringExtra("zasieg")+"000";
+        coordinates = i.getStringArrayListExtra("localization");
+
+        for(int index = 0;index < coordinates.size(); index++)
+            url = url.concat(coordinates.get(index));
+
+        localization = coordinates.get(0) + coordinates.get(2);
+
         url = url.concat(zasieg);
 
-
-
         task.execute();
-      /*  if(task.getStatus() == AsyncTask.Status.FINISHED){
 
-            for (int s = 0; s < dataList.size(); s++)
-                coordinates[s] = (dataList.get(s)).get(TAG_GEOMETRY_COORDINATES_LAT) + (dataList.get(s)).get(TAG_GEOMETRY_COORDINATES_LON);
-
-           Intent google = new Intent(getApplicationContext(),
-                   MapsActivity.class);
-            google.putExtra("cords",dataList);
-            google.addFlags(CITY_FLAG);
-            startActivity(google);
-        }*/
-
-
-
-/*
-        String lat = ((TextView) view.findViewById(R.id.latitude))
-                .getText().toString();
-        String lon = ((TextView) view.findViewById(R.id.longitude))
-                .getText().toString();
-
-
-        // Starting single contact activity
-        Intent in = new Intent(getApplicationContext(),
-                MapsActivity.class);
-        in.putExtra(TAG_GEOMETRY_COORDINATES_LAT, lat);
-        in.putExtra(TAG_GEOMETRY_COORDINATES_LON, lon);
-        in.addFlags(CITY_FLAG);
-        startActivity(in);
-*/
-
-
-
-
-    }
+   }
 
     public class JsonParser extends AsyncTask<Void, Void, Integer> {
 
@@ -122,7 +98,7 @@ public class City_page extends ListActivity {
 
             // Making a request to url and getting response
             String jsonStr = sh.makeServiceCall(url, HttpRetriver.GET);
-            url = "https://api.bihapi.pl/wfs/warszawa/metroEntrances?circle=21.02,52.21,";
+            url = "https://api.bihapi.pl/wfs/warszawa/metroEntrances?circle=";
 
             Log.d("Response: ", "> " + jsonStr);
 
@@ -135,6 +111,7 @@ public class City_page extends ListActivity {
 
                     // looping through All Contacts
                     for (int i = 0; i < data.length(); i++) {
+
                         JSONObject c = data.getJSONObject(i);
 
                         // geometry node is JSON Object
@@ -142,6 +119,10 @@ public class City_page extends ListActivity {
                         JSONObject coordinates = geometry.getJSONObject(TAG_GEOMETRY_COORDINATES);
                         String latitude = coordinates.getString(TAG_GEOMETRY_COORDINATES_LAT);
                         String longitude = coordinates.getString(TAG_GEOMETRY_COORDINATES_LON);
+
+                        String cord_tmp =  latitude + longitude;
+
+                        coords.add(cord_tmp);
 
                         //properties = jsonObj.getJSONArray(TAG_PROPERTIES);
                         JSONObject properties = c.getJSONObject(TAG_PROPERTIES);
@@ -158,6 +139,7 @@ public class City_page extends ListActivity {
 
                         // adding contact to contact list
                         dataList.add(data_tmp);
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -203,21 +185,20 @@ public class City_page extends ListActivity {
 
                 // show it
                 alertDialog.show();
+
             }
-            /**
-             * Updating parsed JSON data into ListView
-             * */
-            ListAdapter adapter = new SimpleAdapter(
-                    City_page.this, dataList,
-                    R.layout.city_list_item, new String[] { TAG_PROPERTIES_VALUE, TAG_GEOMETRY_COORDINATES_LAT,
-                    TAG_GEOMETRY_COORDINATES_LON }, new int[] { R.id.name,
-                    R.id.latitude, R.id.longitude });
+            else {
 
-            setListAdapter(adapter);
+                Intent google = new Intent(getApplicationContext(),
+                        MapsActivity.class);
+                google.putExtra("cords",coords);
+                google.putExtra("localization",localization);
+                google.addFlags(CITY_FLAG);
+                startActivity(google);
 
+            }
 
         }
-
 
     }
 

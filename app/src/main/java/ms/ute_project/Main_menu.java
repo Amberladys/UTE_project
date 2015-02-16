@@ -47,10 +47,10 @@ public class Main_menu extends Activity{
         // check if you are connected or not
         if(isConnected()){
             tvIsConnected.setBackgroundColor(0xFF00CC00);
-            tvIsConnected.setText("You are conncted");
+            tvIsConnected.setText("You are connected");
         }
         else{
-            tvIsConnected.setText("You are NOT conncted");
+            tvIsConnected.setText("You are NOT connected");
         }
 
 
@@ -77,14 +77,6 @@ public class Main_menu extends Activity{
             }
         });
 
-       /* mapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mapStart = new Intent(getApplicationContext(), MapsActivity.class);
-                startActivity(mapStart);
-
-            }
-        });*/
 
 
 

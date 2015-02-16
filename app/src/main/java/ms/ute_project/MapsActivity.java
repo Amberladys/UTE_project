@@ -13,7 +13,8 @@ import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import java.lang.String;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -21,6 +22,9 @@ public class MapsActivity extends FragmentActivity {
     private static final String TAG_GEOMETRY_COORDINATES_LAT = "lat";
     private static final String TAG_GEOMETRY_COORDINATES_LON = "lon";
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    private ArrayList<String> cords = null;
+    private float localization_lat;
+    private float localization_lon;
 
 
     @Override
@@ -31,12 +35,18 @@ public class MapsActivity extends FragmentActivity {
         Intent i = getIntent();
         // Receiving the Data
         int flag = i.getFlags();
+        String localization_tmp = i.getStringExtra("localization");
+        localization_lon = Float.parseFloat(localization_tmp.substring(0,localization_tmp.indexOf(".",4)-2));
+        localization_lat = Float.parseFloat(localization_tmp.substring(localization_tmp.indexOf(".",4)-2));
+
+
         if (flag != 0) {
             float lat = Float.parseFloat(i.getStringExtra(TAG_GEOMETRY_COORDINATES_LAT));
             float lon = Float.parseFloat(i.getStringExtra(TAG_GEOMETRY_COORDINATES_LON));
             setUpMapIfNeeded(lon, lat, flag);
         } else {
-            String[] cords = i.getStringArrayExtra("cords");
+            cords = new ArrayList<String>();
+            cords = i.getStringArrayListExtra("cords");
             setUpMapIfNeeded(cords);
         }
 
@@ -49,12 +59,16 @@ public class MapsActivity extends FragmentActivity {
         Intent i = getIntent();
         // Receiving the Data
         int flag = i.getFlags();
+        localization_lon = Float.parseFloat(i.getStringExtra("localization").substring(0,9));
+        localization_lat = Float.parseFloat(i.getStringExtra("localization").substring(9));
+
         if (flag != 0) {
             float lat = Float.parseFloat(i.getStringExtra(TAG_GEOMETRY_COORDINATES_LAT));
             float lon = Float.parseFloat(i.getStringExtra(TAG_GEOMETRY_COORDINATES_LON));
             setUpMapIfNeeded(lon, lat, flag);
         } else {
-            String[] cords = i.getStringArrayExtra("cords");
+            cords = new ArrayList<String>();
+            cords = i.getStringArrayListExtra("cords");
             setUpMapIfNeeded(cords);
         }
 
@@ -88,7 +102,7 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
-    private void setUpMapIfNeeded(String[] cordinate) {
+    private void setUpMapIfNeeded(ArrayList<String> cordinate) {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -110,19 +124,18 @@ public class MapsActivity extends FragmentActivity {
     private void setUpMap(GoogleMap map, float lon, float lat, int flag) {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(lat, lon), 16));
+                new LatLng(localization_lat, localization_lon), 15));
+
+
+        map.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.me))
+                .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+                .position(new LatLng(localization_lat, localization_lon)));
 
         // You can customize the marker image using images bundled with
         // your app, or dynamically generated bitmaps.
         switch (flag) {
 
-            case 0: {
-                map.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.metro))
-                        .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
-                        .position(new LatLng(lat, lon)));
-                break;
-            }
             case 1: {
                 map.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bikes))
@@ -142,18 +155,25 @@ public class MapsActivity extends FragmentActivity {
         }
     }
 
-    private void setUpMap(GoogleMap map, String[] cordinate) {
+    private void setUpMap(GoogleMap map, ArrayList<String> cordinate) {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(52.233333, 21.016667), 160));
+                new LatLng(localization_lat, localization_lon), 15));
 
         // You can customize the marker image using images bundled with
         // your app, or dynamically generated bitmaps.
 
-        for (int index = 0; index < cordinate.length; index ++) {
 
-            Float lat = Float.parseFloat((cordinate[0].substring(5,9)));
-            Float lon = Float.parseFloat(cordinate[0].substring(19));
+        map.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.me))
+                .anchor(0.0f, 1.0f) // Anchors the marker on the bottom left
+                .position(new LatLng(localization_lat, localization_lon)));
+
+
+        for (int index = 0; index < cordinate.size(); index ++) {
+
+            Float lat = Float.parseFloat(cordinate.get(index).substring(0,9));
+            Float lon = Float.parseFloat(cordinate.get(index).substring(9));
 
 
             map.addMarker(new MarkerOptions()

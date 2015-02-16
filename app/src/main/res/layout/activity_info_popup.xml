@@ -13,7 +13,7 @@
         android:id="@+id/popup_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5sp"
+        android:layout_marginTop="20dp"
         android:height="130dp"
         android:textSize="20dp"
         android:text="Aplikacja 'Gdzie jestem?'\nwersja 1.0\nAutorzy:\nMariusz Sobiech\nŁukasz Czapla"

@@ -39,7 +39,9 @@ public class Park_and_ride_page extends ListActivity {
     JSONArray data = null;
     JSONArray properties = null;
     ArrayList<HashMap<String, String>> dataList;
-    private static String url = "https://api.bihapi.pl/wfs/warszawa/parkAndRide?circle=20.9433,52.1750,";
+
+    private String url = "https://api.bihapi.pl/wfs/warszawa/parkAndRide?circle=";
+    private String localization;
 
     private static final int PARK_AND_RIDE_FLAG = 2;
 
@@ -58,8 +60,14 @@ public class Park_and_ride_page extends ListActivity {
 
         Intent i = getIntent();
         // Receiving the Data
-        String zasieg = i.getStringExtra("zasieg");
-        url = url.concat(zasieg) + "000";
+        final String zasieg = i.getStringExtra("zasieg") + "000";
+        final ArrayList<String> coordinates = i.getStringArrayListExtra("localization");
+
+        for(int index = 0;index < coordinates.size(); index++)
+           url = url.concat(coordinates.get(index));
+        url = url.concat(zasieg) ;
+
+        localization = coordinates.get(0) + coordinates.get(2);
 
         new JsonParser().execute();
 
@@ -84,6 +92,7 @@ public class Park_and_ride_page extends ListActivity {
                         MapsActivity.class);
                 in.putExtra(TAG_GEOMETRY_COORDINATES_LAT, lat.substring(5));
                 in.putExtra(TAG_GEOMETRY_COORDINATES_LON, lon.substring(5));
+                in.putExtra("localization", localization);
                 in.addFlags(PARK_AND_RIDE_FLAG);
                 startActivity(in);
 
@@ -116,7 +125,7 @@ public class Park_and_ride_page extends ListActivity {
 
             // Making a request to url and getting response
             String jsonStr = sh.makeServiceCall(url, HttpRetriver.GET);
-            url = "https://api.bihapi.pl/wfs/warszawa/parkAndRide?circle=20.9433,52.1750,";
+            url = "https://api.bihapi.pl/wfs/warszawa/parkAndRide?circle=";
 
             Log.d("Response: ", "> " + jsonStr);
 
@@ -165,6 +174,7 @@ public class Park_and_ride_page extends ListActivity {
                 }
                 else {
                     try {
+                        url = "https://api.bihapi.pl/wfs/warszawa/parkAndRide?circle=";
                         JSONObject jsonObj = new JSONObject(jsonStr);
 
                         // Getting JSON Array node
